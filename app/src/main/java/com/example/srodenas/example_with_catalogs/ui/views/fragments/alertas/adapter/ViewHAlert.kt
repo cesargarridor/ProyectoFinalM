@@ -1,15 +1,14 @@
-package com.example.srodenas.example_with_catalogs.ui.views.fragments.alerts.adapter
+package com.example.srodenas.example_with_catalogs.ui.views.fragments.alertas.adapter
 
+import java.time.LocalDateTime
 import android.graphics.Color
 import android.os.Build
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.srodenas.example_with_catalogs.databinding.ItemAlertBinding
 import com.example.srodenas.example_with_catalogs.domain.alerts.models.Alert
-import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class ViewHAlert(
     view: View,
@@ -24,18 +23,15 @@ class ViewHAlert(
     fun renderize(alert: Alert, position: Int) {
         with(binding) {
             txtNameAlert.text = alert.textShort
-            dateAlert.text = alert.alertDate
+            dateAlert.text = alert.alertDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
             txtDescriptionShort.text = alert.textShort
             txtDescription.text = alert.message
 
-            // Verifica si la fecha de la alerta ha pasado
-            val currentDate = LocalDate.now()
-            val alertDate = LocalDate.parse(alert.alertDate)
-
-            if (alertDate.isBefore(currentDate)) {
-                root.setCardBackgroundColor(Color.parseColor("#FFCDD2")) // Color rojo claro para indicar que la alerta ha pasado
+            // Cambiar el color de fondo si la alerta ha pasado
+            if (alert.alertDate.isBefore(LocalDateTime.now())) {
+                root.setCardBackgroundColor(Color.RED)
             } else {
-                root.setCardBackgroundColor(Color.parseColor("#FFFFFF")) // Color blanco para las alertas que no han pasado
+                root.setCardBackgroundColor(Color.WHITE)
             }
 
             btnDeleteAlert.setOnClickListener {
@@ -51,5 +47,4 @@ class ViewHAlert(
             }
         }
     }
-
 }

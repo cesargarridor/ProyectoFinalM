@@ -1,50 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center">
-
-
-
-    <EditText
-        android:id="@+id/txt_view_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
-        android:hint="Introduce el nombre"
-        />
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <EditText
-        android:id="@+id/txt_view_message"
+        android:id="@+id/txtViewName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
-        android:hint="Introduce la descripción"
-        />
-
-
+        android:hint="Nombre de la alerta"
+        android:inputType="text" />
 
     <EditText
-        android:id="@+id/txt_view_fecha"
+        android:id="@+id/txtViewMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
-        android:hint="Introduce la fecha"
-        />
+        android:hint="Mensaje de la alerta"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/txtViewFecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Seleccionar fecha y hora"
+        android:padding="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:focusable="true"
+        android:clickable="true" />
 </LinearLayout>
-    </ScrollView>

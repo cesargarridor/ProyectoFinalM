@@ -1,11 +1,13 @@
 package com.example.srodenas.example_with_catalogs.ui.views.fragments.alertas
 
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.*
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.srodenas.example_with_catalogs.R
 import com.example.srodenas.example_with_catalogs.databinding.FragmentAlertasBinding
@@ -13,7 +15,8 @@ import com.example.srodenas.example_with_catalogs.domain.alerts.models.Alert
 import com.example.srodenas.example_with_catalogs.ui.viewmodel.alertas.AlertaViewModel
 import com.example.srodenas.example_with_catalogs.ui.views.fragments.alertas.dialogs.AddAlert
 import com.example.srodenas.example_with_catalogs.ui.views.fragments.alertas.dialogs.EditAlert
-import com.example.srodenas.example_with_catalogs.ui.views.fragments.alerts.adapter.AdapterAlerts
+import com.example.srodenas.example_with_catalogs.ui.views.fragments.alertas.adapter.AdapterAlerts
+import java.time.LocalDateTime
 
 class AlertasFragment : Fragment() {
     private var _binding: FragmentAlertasBinding? = null
@@ -21,6 +24,17 @@ class AlertasFragment : Fragment() {
     private val viewModelAlerts: AlertaViewModel by viewModels()
 
     private lateinit var adapterAlerts: AdapterAlerts
+
+    private val handler = Handler()
+    private val updateInterval = 60000L
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private val updateBackgroundRunnable = object : Runnable {
+        override fun run() {
+            adapterAlerts.notifyDataSetChanged() // actualizar la lista para aplicar los cambios en el fondo
+            handler.postDelayed(this, updateInterval)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,10 +45,12 @@ class AlertasFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         initEvent()
+        handler.post(updateBackgroundRunnable)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -68,10 +84,11 @@ class AlertasFragment : Fragment() {
         binding.myRecyclerViewAlerts.adapter = adapterAlerts
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initEvent() {
         binding.btnAdd.setOnClickListener {
-            val dialog = AddAlert { alert ->
-                okOnAddAlert(alert)
+            val dialog = AddAlert { alert, selectedDateTime ->
+                okOnAddAlert(alert, selectedDateTime) // selectedDateTime es ahora de tipo LocalDateTime?
             }
             dialog.show(requireActivity().supportFragmentManager, "Agregar Alerta")
         }
@@ -83,15 +100,16 @@ class AlertasFragment : Fragment() {
         })
     }
 
-    private fun okOnAddAlert(alert: Alert) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun okOnAddAlert(alert: Alert, selectedDateTime: LocalDateTime?) {
         val newAlert = Alert(
             userId = 0,
             textShort = alert.textShort,
             message = alert.message,
-            alertDate = alert.alertDate
+            alertDate = selectedDateTime ?: LocalDateTime.now() // Provee un valor predeterminado en caso de que sea null
         )
         viewModelAlerts.addAlert(newAlert)
-        Toast.makeText(requireContext(), "Alerta agregada correctamente", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "Alerta agregada", Toast.LENGTH_LONG).show()
     }
 
     private fun editAlert(alert: Alert, position: Int) {
@@ -106,8 +124,10 @@ class AlertasFragment : Fragment() {
         viewModelAlerts.deleteAlert(position)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onDestroyView() {
         super.onDestroyView()
+        handler.removeCallbacks(updateBackgroundRunnable)
         _binding = null
     }
 }

@@ -1,7 +1,9 @@
-package com.example.srodenas.example_with_catalogs.ui.views.fragments.alerts.adapter
+package com.example.srodenas.example_with_catalogs.ui.views.fragments.alertas.adapter
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.srodenas.example_with_catalogs.databinding.ItemAlertBinding
 import com.example.srodenas.example_with_catalogs.domain.alerts.models.Alert
@@ -21,9 +23,9 @@ class AdapterAlerts(
 
     override fun getItemCount(): Int = listAlerts.size
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHAlert, position: Int) {
         val alert = listAlerts[position]
         holder.renderize(alert, position)
     }
-
 }

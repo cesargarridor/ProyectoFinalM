@@ -3,25 +3,22 @@ package com.example.srodenas.example_with_catalogs.data.users.database.converter
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.room.TypeConverter
-import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class DateConverter {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @TypeConverter
-    fun fromLocalDate(date: LocalDate?): String?{
-        return date?.format(DateTimeFormatter.ISO_LOCAL_DATE)
+    fun fromLocalDateTime(dateTime: LocalDateTime?): String? {
+        return dateTime?.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
     }
-
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     @TypeConverter
-    fun toLocalDate(date: String?) : LocalDate?{
-        return date?.let{
-            LocalDate.parse(it, DateTimeFormatter.ISO_LOCAL_DATE)
+    fun toLocalDateTime(dateTime: String?): LocalDateTime? {
+        return dateTime?.let {
+            LocalDateTime.parse(it, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
         }
     }
-
 }
