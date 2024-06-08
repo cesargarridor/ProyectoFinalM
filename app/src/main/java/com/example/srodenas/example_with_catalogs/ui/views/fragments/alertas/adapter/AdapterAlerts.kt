@@ -22,6 +22,8 @@ class AdapterAlerts(
     override fun getItemCount(): Int = listAlerts.size
 
     override fun onBindViewHolder(holder: ViewHAlert, position: Int) {
-        holder.renderize(listAlerts[position], position)
+        val alert = listAlerts[position]
+        holder.renderize(alert, position)
     }
+
 }
