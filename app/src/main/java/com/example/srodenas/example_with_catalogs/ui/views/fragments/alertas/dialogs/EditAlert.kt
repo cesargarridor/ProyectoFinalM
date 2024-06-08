@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -30,15 +31,16 @@ class EditAlert(
             val viewDialogEditAlert = inflater.inflate(R.layout.edit_alert_dialog, null)
             binding = EditAlertDialogBinding.bind(viewDialogEditAlert)
 
-            binding.txtViewName.setText(alert.textShort)
-            binding.txtViewMessage.setText(alert.message)
-           // binding.txtViewFecha.text = alert.alertDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+            // Asignar el texto a los campos
+            binding.txtViewName.text = Editable.Factory.getInstance().newEditable(alert.textShort)
+            binding.txtViewMessage.text = Editable.Factory.getInstance().newEditable(alert.message)
+            binding.txtViewFecha.text = Editable.Factory.getInstance().newEditable(alert.alertDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
             selectedDateTime = alert.alertDate
 
             binding.txtViewFecha.setOnClickListener {
                 DateTimePickerDialog(requireContext()) { dateTime ->
                     selectedDateTime = dateTime
-                    //binding.txtViewFecha.text = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                    binding.txtViewFecha.text = Editable.Factory.getInstance().newEditable(dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 }
             }
 

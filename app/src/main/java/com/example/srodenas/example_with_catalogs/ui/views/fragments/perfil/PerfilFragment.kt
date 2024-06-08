@@ -29,7 +29,7 @@ class PerfilFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(PerfilViewModel::class.java)
+        viewModel = ViewModelProvider(this)[PerfilViewModel::class.java]
         sharedPreferencesManager = SharedPreferencesManager(requireContext())
 
         viewModel.userData.observe(viewLifecycleOwner) { user ->
@@ -48,8 +48,8 @@ class PerfilFragment : Fragment() {
         val email = sharedPreferencesManager.getUserEmail()
         val name = sharedPreferencesManager.getUserName()
 
-        binding.textViewEmail2.text = email ?: "Email not found"
-        binding.textViewName2.text = name ?: "Name not found"
+        binding.textViewEmail2.text = email
+        binding.textViewName2.text = name
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

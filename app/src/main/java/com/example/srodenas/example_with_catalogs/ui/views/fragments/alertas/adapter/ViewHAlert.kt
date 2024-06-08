@@ -31,7 +31,7 @@ class ViewHAlert(
             if (alert.alertDate.isBefore(LocalDateTime.now())) {
                 root.setCardBackgroundColor(Color.RED)
             } else {
-                root.setCardBackgroundColor(Color.WHITE)
+                root.setCardBackgroundColor(Color.CYAN)
             }
 
             btnDeleteAlert.setOnClickListener {
