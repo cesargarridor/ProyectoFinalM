@@ -32,6 +32,15 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_login)
+
+        // Verificar si el usuario ya ha iniciado sesión
+        val sharedPreferencesManager = SharedPreferencesManager(applicationContext)
+        if (sharedPreferencesManager.isUserLoggedIn()) {
+            startActivity(Intent(this@MainActivityLogin, MainActivity::class.java))
+            finish() // Cerrar la actividad de inicio de sesión
+            return
+        }
+
         if (verificarPermiso()) {
         } else {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), MY_PERMISSIONS)
