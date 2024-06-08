@@ -68,43 +68,5 @@
             android:textSize="16sp"
             android:fontFamily="sans-serif-condensed" />
 
-
-        <TextView
-            android:id="@+id/textViewFotoPerfil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="¿Quieres usar foto de perfil? Selecciona una de las opciones"
-            android:textSize="18sp"
-            android:textColor="#FDD835"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"/>
-
-        <ImageView
-            android:id="@+id/imageView_user"
-            android:layout_width="match_parent"
-            android:layout_height="143dp"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-
-            <ImageView
-                android:id="@+id/galeria"
-                android:layout_width="133dp"
-                android:layout_height="80dp"
-                app:srcCompat="@drawable/ic_menu_gallery" />
-
-
-            <ImageView
-                android:id="@+id/camara"
-                android:layout_width="122dp"
-                android:layout_height="80dp"
-                app:srcCompat="@drawable/ic_menu_camera" />
-
-
-        </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

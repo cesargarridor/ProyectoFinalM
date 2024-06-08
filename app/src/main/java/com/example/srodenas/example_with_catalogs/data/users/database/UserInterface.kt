@@ -17,6 +17,6 @@ interface UserInterface {
     @Headers("Content-Type: application/json")
     @POST("registro")
     fun registro(@Body registro: Registro?): Call<User?>?
-    @GET("users")
+    @GET("user")
     fun getUsers(): Call<List<User>>
 }

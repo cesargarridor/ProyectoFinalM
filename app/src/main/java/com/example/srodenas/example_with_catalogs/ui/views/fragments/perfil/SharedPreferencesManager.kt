@@ -6,43 +6,44 @@ import android.preference.PreferenceManager
 
 class SharedPreferencesManager(context: Context) {
 
-    private val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+
+    private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     companion object {
-        private const val USER_TOKEN = "user_token"
-        private const val USER_EMAIL = "user_email"
-        private const val USER_NAME = "user_name"
+        private const val PREFS_NAME = "user_prefs"
+        private const val TOKEN_KEY = "token"
+        private const val EMAIL_KEY = "email"
+        private const val NAME_KEY = "name"
     }
 
     fun saveUserData(token: String, email: String, name: String) {
         val editor = prefs.edit()
-        editor.putString(USER_TOKEN, token)
-        editor.putString(USER_EMAIL, email)
-        editor.putString(USER_NAME, name)
+        editor.putString(TOKEN_KEY, token)
+        editor.putString(EMAIL_KEY, email)
+        editor.putString(NAME_KEY, name)
         editor.apply()
     }
 
-    fun getUserToken(): String? {
-        return prefs.getString(USER_TOKEN, null)
+    fun getToken(): String? {
+        return prefs.getString(TOKEN_KEY, null)
     }
 
-    fun getUserEmail(): String? {
-        return prefs.getString(USER_EMAIL, null)
+    fun getEmail(): String? {
+        return prefs.getString(EMAIL_KEY, null)
     }
 
-    fun getUserName(): String? {
-        return prefs.getString(USER_NAME, null)
+    fun getName(): String? {
+        return prefs.getString(NAME_KEY, null)
     }
-
     fun isUserLoggedIn(): Boolean {
-        return getUserToken() != null && getUserEmail() != null && getUserName() != null
+        return getToken() != null && getEmail() != null && getName() != null
     }
 
     fun clearUserData() {
         val editor = prefs.edit()
-        editor.remove(USER_TOKEN)
-        editor.remove(USER_EMAIL)
-        editor.remove(USER_NAME)
+        editor.remove(TOKEN_KEY)
+        editor.remove(EMAIL_KEY)
+        editor.remove(NAME_KEY)
         editor.apply()
     }
 }

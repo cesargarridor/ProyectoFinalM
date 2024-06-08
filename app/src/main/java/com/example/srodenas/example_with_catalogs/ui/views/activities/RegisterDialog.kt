@@ -34,28 +34,11 @@ class RegisterDialog : DialogFragment() {
     private var usuario: EditText? = null
     private var pass: EditText? = null
     private var email: EditText? = null
-    private var imagenUsuario: ImageView? = null
-    private var camara: ImageView? = null
-    private var galeria: ImageView? = null
-    private var bitMap: Bitmap? = null
-    private var inicioCamara: ActivityResultLauncher<Intent>? = null
-    private var inicioLecturaGaleria: ActivityResultLauncher<Intent>? = null
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity: Activity? = activity
         val inflater = activity!!.layoutInflater
         val view = inflater.inflate(R.layout.dialog_registro, null)
         cargarViews(view)
-        crearInicioACtividadCamara()
-        crearInicioActividadLeerImagenGaleria()
-        camara!!.setOnClickListener { e: View? ->
-            val intentCamara = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            inicioCamara!!.launch(intentCamara)
-        }
-        galeria!!.setOnClickListener { e: View? ->
-            val intentGaleria = Intent(Intent.ACTION_GET_CONTENT)
-            intentGaleria.type = "image/*"
-            inicioLecturaGaleria!!.launch(intentGaleria)
-        }
         return AlertDialog.Builder(activity)
             .setView(view)
             .setTitle("Registro de usuario")
@@ -64,16 +47,6 @@ class RegisterDialog : DialogFragment() {
                 registro.nombre = usuario!!.text.toString()
                 registro.password = pass!!.text.toString()
                 registro.email = email!!.text.toString()
-                var imageBase64 = ""
-                if (bitMap != null) {
-                    val byteArrayOutputStream = ByteArrayOutputStream()
-                    bitMap!!.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream)
-                    val byteArray = byteArrayOutputStream.toByteArray()
-                    imageBase64 =
-                        "data:image/jpeg;base64," + Base64.encodeToString(byteArray, Base64.DEFAULT)
-                }
-                registro.imagen = imageBase64
-                registro.disponible = 1
                 val mListener =
                     context as OnUserInteractionDialogListener? //aquí hay que pasarle el fragmento al que se refiuere y no el contexto, como estaba antes
                 mListener!!.insertarUsuario(registro)
@@ -85,40 +58,5 @@ class RegisterDialog : DialogFragment() {
         usuario = view.findViewById(R.id.registro_usuario)
         pass = view.findViewById(R.id.registro_password)
         email = view.findViewById(R.id.registro_email)
-        imagenUsuario = view.findViewById(R.id.imageView_user)
-        camara = view.findViewById<View>(R.id.camara) as ImageView
-        galeria = view.findViewById<View>(R.id.galeria) as ImageView
-    }
-
-    private fun crearInicioACtividadCamara() {
-        inicioCamara = registerForActivityResult<Intent, ActivityResult>(
-            ActivityResultContracts.StartActivityForResult(),
-            object : ActivityResultCallback<ActivityResult?> {
-                override fun onActivityResult(result: ActivityResult?) {
-                    if (result != null) {
-                        bitMap = result.data!!.extras!!["data"] as Bitmap?
-                    }
-                    imagenUsuario!!.setImageBitmap(bitMap)
-                }
-            }
-        )
-    }
-
-    private fun crearInicioActividadLeerImagenGaleria() {
-        inicioLecturaGaleria = registerForActivityResult<Intent, ActivityResult>(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val imagenUri = result.data!!.data
-                imagenUsuario!!.setImageURI(imagenUri)
-                try {
-                    bitMap = MediaStore.Images.Media.getBitmap(
-                        this.requireActivity().contentResolver,
-                        imagenUri
-                    )
-                } catch (e: IOException) {
-                }
-            }
-        }
     }
 }

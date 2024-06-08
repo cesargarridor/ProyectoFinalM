@@ -52,7 +52,6 @@ class UsuariosFragment : Fragment() {
             )
         })
 
-
         userViewModel.showUsers()
     }
 

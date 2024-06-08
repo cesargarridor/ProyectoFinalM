@@ -32,12 +32,12 @@ class PerfilFragment : Fragment() {
         viewModel = ViewModelProvider(this)[PerfilViewModel::class.java]
         sharedPreferencesManager = SharedPreferencesManager(requireContext())
 
+        loadUserProfile()
+
         viewModel.userData.observe(viewLifecycleOwner) { user ->
             if (user != null) {
                 binding.textViewName2.text = user.nombre
                 binding.textViewEmail2.text = user.email
-            } else {
-                loadUserProfile()
             }
         }
 
@@ -45,11 +45,11 @@ class PerfilFragment : Fragment() {
     }
 
     private fun loadUserProfile() {
-        val email = sharedPreferencesManager.getUserEmail()
-        val name = sharedPreferencesManager.getUserName()
+        val email = sharedPreferencesManager.getEmail()
+        val name = sharedPreferencesManager.getName()
 
-        binding.textViewEmail2.text = email
-        binding.textViewName2.text = name
+        binding.textViewEmail2.text = email ?: "Email not found"
+        binding.textViewName2.text = name ?: "Name not found"
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
