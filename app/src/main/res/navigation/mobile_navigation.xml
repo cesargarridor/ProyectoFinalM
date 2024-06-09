@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.cursoaristi.myapplication.ui.home.PerfilFragment"
+        android:name="com.example.srodenas.example_with_catalogs.ui.views.fragments.perfil.PerfilFragment"
         tools:layout="@layout/fragment_perfil" />
 
     <fragment

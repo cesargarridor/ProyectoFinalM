@@ -1,8 +1,8 @@
 package com.example.srodenas.example_with_catalogs.data.users.database
 
-import com.cursoaristi.myapplication.models.Login
-import com.cursoaristi.myapplication.models.Registro
-import com.cursoaristi.myapplication.models.User
+import com.example.srodenas.example_with_catalogs.domain.users.models.Login
+import com.example.srodenas.example_with_catalogs.domain.users.models.Registro
+import com.example.srodenas.example_with_catalogs.domain.users.models.User
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

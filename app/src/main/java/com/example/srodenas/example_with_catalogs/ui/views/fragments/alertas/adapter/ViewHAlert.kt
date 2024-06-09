@@ -24,8 +24,8 @@ class ViewHAlert(
         with(binding) {
             txtNameAlert.text = alert.textShort
             dateAlert.text = alert.alertDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-            txtDescriptionShort.text = alert.textShort
-            txtDescription.text = alert.message
+            txtDescriptionShort.text = ("nombre: "+alert.textShort)
+            txtDescription.text =  ("Descripcion: "+alert.message)
 
             // Cambiar el color de fondo si la alerta ha pasado
             if (alert.alertDate.isBefore(LocalDateTime.now())) {
@@ -38,9 +38,7 @@ class ViewHAlert(
                 onDelete(position)
             }
 
-            btnDescriptionAlert.setOnClickListener {
-                onDetails(position)
-            }
+
 
             btnEditAlert.setOnClickListener {
                 onEdit(alert, position)

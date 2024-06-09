@@ -10,9 +10,9 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.cursoaristi.myapplication.models.Login
-import com.cursoaristi.myapplication.models.Registro
-import com.cursoaristi.myapplication.models.User
+import com.example.srodenas.example_with_catalogs.domain.users.models.Login
+import com.example.srodenas.example_with_catalogs.domain.users.models.Registro
+import com.example.srodenas.example_with_catalogs.domain.users.models.User
 import com.example.srodenas.example_with_catalogs.R
 import com.example.srodenas.example_with_catalogs.data.users.database.UserInterface
 import com.example.srodenas.example_with_catalogs.domain.users.OnUserInteractionDialogListener

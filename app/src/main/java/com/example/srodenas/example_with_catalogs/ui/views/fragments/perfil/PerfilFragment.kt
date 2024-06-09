@@ -1,4 +1,4 @@
-package com.cursoaristi.myapplication.ui.home
+package com.example.srodenas.example_with_catalogs.ui.views.fragments.perfil
 
 import android.os.Bundle
 import android.view.*
@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.srodenas.example_with_catalogs.R
 import com.example.srodenas.example_with_catalogs.databinding.FragmentPerfilBinding
 import com.example.srodenas.example_with_catalogs.ui.viewmodel.perfil.PerfilViewModel
-import com.example.srodenas.example_with_catalogs.ui.views.fragments.perfil.SharedPreferencesManager
 
 class PerfilFragment : Fragment() {
 
@@ -34,22 +33,14 @@ class PerfilFragment : Fragment() {
 
         loadUserProfile()
 
-        viewModel.userData.observe(viewLifecycleOwner) { user ->
-            if (user != null) {
-                binding.textViewName2.text = user.nombre
-                binding.textViewEmail2.text = user.email
-            }
-        }
-
-        viewModel.loadUserData()
     }
 
     private fun loadUserProfile() {
         val email = sharedPreferencesManager.getEmail()
         val name = sharedPreferencesManager.getName()
 
-        binding.textViewEmail2.text = email ?: "Email not found"
-        binding.textViewName2.text = name ?: "Name not found"
+        binding.textViewEmail.text = ("Email: "+email )
+        binding.textViewName.text = ("Nombre: "+name )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

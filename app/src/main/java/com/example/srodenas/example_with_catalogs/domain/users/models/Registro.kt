@@ -1,4 +1,4 @@
-package com.cursoaristi.myapplication.models
+package com.example.srodenas.example_with_catalogs.domain.users.models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

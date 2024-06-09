@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cursoaristi.myapplication.models.User
+import com.example.srodenas.example_with_catalogs.domain.users.models.User
 import com.example.srodenas.example_with_catalogs.data.users.database.UserInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
