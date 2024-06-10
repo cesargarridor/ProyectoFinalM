@@ -36,16 +36,19 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
         // Verificar si el usuario ya ha iniciado sesión
         val sharedPreferencesManager = SharedPreferencesManager(applicationContext)
         if (sharedPreferencesManager.isUserLoggedIn()) {
+            // Si el usuario ya ha iniciado sesión, redirigir a MainActivity
             startActivity(Intent(this@MainActivityLogin, MainActivity::class.java))
             finish() // Cerrar la actividad de inicio de sesión
             return
         }
 
+        // Verificar permisos
         if (verificarPermiso()) {
+            // Si se tienen los permisos necesarios
         } else {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), MY_PERMISSIONS)
         }
-        inicializarCampos()
+        inicializarCampos() // Inicializar los campos de entrada
     }
 
     private fun inicializarCampos() {
@@ -72,6 +75,7 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
     }
 
     private suspend fun login(login: Login): User? {
+        // Configurar Retrofit para hacer la llamada de inicio de sesión
         val retrofit = Retrofit.Builder()
             .baseUrl("http://10.0.2.2/api-pueblos/endp/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -92,6 +96,7 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
     }
 
     private fun entrarConRegis(user: User?) {
+        // Guardar los datos del usuario en SharedPreferences y redirigir a MainActivity
         val sharedPreferencesManager = SharedPreferencesManager(applicationContext)
         sharedPreferencesManager.saveUserData(user?.token ?: "", user?.email ?: "", user?.nombre ?: "")
 
@@ -99,10 +104,12 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
     }
 
     fun iniciarRegistro(view: View?) {
+        // Mostrar diálogo de registro
         RegisterDialog().show(supportFragmentManager, "Registro Usuario")
     }
 
     private fun showError() {
+        // Mostrar un mensaje de error en caso de credenciales incorrectas
         Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
     }
 
@@ -136,6 +143,7 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
     }
 
     private fun verificarPermiso(): Boolean {
+        // Verificar si se tiene el permiso de la cámara
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true
         }

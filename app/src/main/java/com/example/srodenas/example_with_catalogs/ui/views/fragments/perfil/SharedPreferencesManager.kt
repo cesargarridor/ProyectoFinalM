@@ -2,10 +2,8 @@ package com.example.srodenas.example_with_catalogs.ui.views.fragments.perfil
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
 
 class SharedPreferencesManager(context: Context) {
-
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
@@ -16,6 +14,7 @@ class SharedPreferencesManager(context: Context) {
         private const val NAME_KEY = "name"
     }
 
+    // Guardar los datos del usuario en SharedPreferences
     fun saveUserData(token: String, email: String, name: String) {
         val editor = prefs.edit()
         editor.putString(TOKEN_KEY, token)
@@ -24,21 +23,27 @@ class SharedPreferencesManager(context: Context) {
         editor.apply()
     }
 
+    // Obtener el token del usuario
     fun getToken(): String? {
         return prefs.getString(TOKEN_KEY, null)
     }
 
+    // Obtener el email del usuario
     fun getEmail(): String? {
         return prefs.getString(EMAIL_KEY, null)
     }
 
+    // Obtener el nombre del usuario
     fun getName(): String? {
         return prefs.getString(NAME_KEY, null)
     }
+
+    // Verificar si el usuario ha iniciado sesión
     fun isUserLoggedIn(): Boolean {
         return getToken() != null && getEmail() != null && getName() != null
     }
 
+    // Limpiar los datos del usuario
     fun clearUserData() {
         val editor = prefs.edit()
         editor.remove(TOKEN_KEY)

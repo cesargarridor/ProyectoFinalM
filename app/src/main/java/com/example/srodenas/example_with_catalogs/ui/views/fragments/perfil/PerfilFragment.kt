@@ -21,7 +21,7 @@ class PerfilFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPerfilBinding.inflate(inflater, container, false)
-        setHasOptionsMenu(true)
+        setHasOptionsMenu(true) // Habilitar el menú de opciones en este fragmento
         return binding.root
     }
 
@@ -31,26 +31,28 @@ class PerfilFragment : Fragment() {
         viewModel = ViewModelProvider(this)[PerfilViewModel::class.java]
         sharedPreferencesManager = SharedPreferencesManager(requireContext())
 
-        loadUserProfile()
+        loadUserProfile() // Cargar los datos del perfil del usuario
 
     }
 
     private fun loadUserProfile() {
+        // Obtener los datos del usuario de SharedPreferences y mostrarlos en la UI
         val email = sharedPreferencesManager.getEmail()
         val name = sharedPreferencesManager.getName()
 
-        binding.textViewEmail.text = ("Email: "+email )
-        binding.textViewName.text = ("Nombre: "+name )
+        binding.textViewEmail.text = ("Email: " + email)
+        binding.textViewName.text = ("Nombre: " + name)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
+        inflater.inflate(R.menu.menu_main, menu) // Inflar el menú
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
+                // Manejar la opción de cerrar sesión
                 sharedPreferencesManager.clearUserData()
                 requireActivity().finish()
                 true

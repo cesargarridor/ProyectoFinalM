@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         // Verificar si el usuario ya ha iniciado sesión
         val sharedPreferencesManager = SharedPreferencesManager(applicationContext)
         if (!sharedPreferencesManager.isUserLoggedIn()) {
+            // Si el usuario no ha iniciado sesión, redirigir al login
             startActivity(Intent(this, MainActivityLogin::class.java))
             finish()
             return
@@ -31,8 +32,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Establecer la barra de herramientas (toolbar)
         setSupportActionBar(binding.toolbar)
 
+        // Configuración de la navegación inferior
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -42,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        // Configura la barra de herramientas con el controlador de navegación y la configuración de la barra de navegación
+        // Configurar la barra de herramientas con el controlador de navegación y la configuración de la barra de navegación
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         supportActionBar?.title = "Aplicación César"
@@ -57,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                logout()
+                logout()  // Manejar la opción de cerrar sesión
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -70,6 +73,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun logout() {
+        // Limpiar los datos del usuario y redirigir al login
         val sharedPreferencesManager = SharedPreferencesManager(this)
         sharedPreferencesManager.clearUserData()
         startActivity(Intent(this, MainActivityLogin::class.java))

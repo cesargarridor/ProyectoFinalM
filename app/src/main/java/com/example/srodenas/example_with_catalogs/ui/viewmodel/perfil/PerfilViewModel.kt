@@ -16,6 +16,8 @@ class PerfilViewModel : ViewModel() {
 
     private val repository = Repository.repo
 
+    // Cargar los datos del usuario desde el repositorio
+    //No se utiliza ya
     fun loadUserData() {
         viewModelScope.launch(Dispatchers.IO) {
             val user = repository.getLoggedUser()

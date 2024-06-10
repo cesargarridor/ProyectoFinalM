@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+// ViewModel para manejar los datos de los usuarios
 class UserViewModel : ViewModel() {
     private val _usersLiveData = MutableLiveData<Result<List<User>>>()
     val usersLiveData: LiveData<Result<List<User>>> = _usersLiveData
@@ -23,6 +24,7 @@ class UserViewModel : ViewModel() {
 
     private val userAPI = retrofit.create(UserInterface::class.java)
 
+    // Obtener la lista de usuarios desde la API
     fun showUsers() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
