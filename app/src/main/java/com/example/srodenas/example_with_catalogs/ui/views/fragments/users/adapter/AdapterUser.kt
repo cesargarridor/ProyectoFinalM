@@ -46,6 +46,14 @@ class AdapterUser(
                 }
                 itemView.context.startActivity(emailIntent)
             }
+
+            // Configurar el botón de llamada telefónica
+            binding.btnCall.setOnClickListener {
+                val callIntent = Intent(Intent.ACTION_DIAL).apply {
+                    data = Uri.parse("tel:${user.id}")
+                }
+                itemView.context.startActivity(callIntent)
+            }
         }
     }
 }
