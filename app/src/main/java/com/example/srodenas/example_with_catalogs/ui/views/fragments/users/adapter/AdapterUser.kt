@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.srodenas.example_with_catalogs.domain.users.models.User
 import com.example.srodenas.example_with_catalogs.databinding.ItemUserBinding
+import com.example.srodenas.example_with_catalogs.ui.views.activities.MainActivity
 
 // Adapter para manejar la lista de usuarios en un RecyclerView
 class AdapterUser(
@@ -49,10 +50,8 @@ class AdapterUser(
 
             // Configurar el botón de llamada telefónica
             binding.btnCall.setOnClickListener {
-                val callIntent = Intent(Intent.ACTION_DIAL).apply {
-                    data = Uri.parse("tel:${user.id}")
-                }
-                itemView.context.startActivity(callIntent)
+                val activity = it.context as? MainActivity
+                activity?.makeCall(user.id.toString())
             }
         }
     }

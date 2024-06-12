@@ -1,10 +1,15 @@
 package com.example.srodenas.example_with_catalogs.ui.views.activities
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -16,6 +21,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val CALL_PHONE_REQUEST_CODE = 1
+    private var phoneNumberToCall: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +56,45 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         supportActionBar?.title = "Aplicación César"
+    }
+
+    fun makeCall(phoneNumber: String) {
+        phoneNumberToCall = phoneNumber
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.CALL_PHONE), CALL_PHONE_REQUEST_CODE)
+        } else {
+            startCall(phoneNumber)
+        }
+    }
+
+    private fun startCall(phoneNumber: String) {
+        val callIntent = Intent(Intent.ACTION_CALL).apply {
+            data = Uri.parse("tel:$phoneNumber")
+        }
+        startActivity(callIntent)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            CALL_PHONE_REQUEST_CODE -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // Permiso concedido, iniciar llamada
+                    phoneNumberToCall?.let {
+                        startCall(it)
+                    }
+                } else {
+                    // Permiso denegado, manejar el caso
+                }
+                return
+            }
+            else -> {
+                // Otro código de solicitud, manejar si es necesario
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

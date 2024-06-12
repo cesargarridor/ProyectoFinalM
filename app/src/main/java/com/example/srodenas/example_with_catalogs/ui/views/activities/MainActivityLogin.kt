@@ -84,19 +84,28 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
         return try {
             val response = call?.execute()
             if (response?.isSuccessful == true) {
-                response.body()
+                val user = response.body()
+                Log.d("MainActivityLogin", "Login exitoso: Usuario - $user")
+                user
             } else {
+                Log.e("MainActivityLogin", "Error en login: ${response?.errorBody()?.string()}")
                 null
             }
         } catch (e: Exception) {
-            Log.e("error", e.message ?: "Error desconocido")
+            Log.e("MainActivityLogin", "Excepción en login: ${e.message}")
             null
         }
     }
 
+    // En MainActivityLogin
     private fun entrarConRegis(user: User?) {
         val sharedPreferencesManager = SharedPreferencesManager(applicationContext)
+
+        Log.d("MainActivityLogin", "Datos del usuario a guardar: Token - ${user?.token}, Email - ${user?.email}, Nombre - ${user?.nombre}")
+
         sharedPreferencesManager.saveUserData(user?.token ?: "", user?.email ?: "", user?.nombre ?: "")
+
+        Log.d("MainActivityLogin", "Datos guardados: Email - ${user?.email}, Nombre - ${user?.nombre}")
 
         startActivity(Intent(this@MainActivityLogin, MainActivity::class.java))
     }

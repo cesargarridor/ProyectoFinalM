@@ -1,29 +1,40 @@
 package com.example.srodenas.example_with_catalogs.ui.viewmodel.perfil
 
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.srodenas.example_with_catalogs.domain.users.models.User
-import com.example.srodenas.example_with_catalogs.domain.users.models.Repository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.srodenas.example_with_catalogs.ui.views.fragments.perfil.SharedPreferencesManager
 
-class PerfilViewModel : ViewModel() {
+class PerfilViewModel(application: Application) : AndroidViewModel(application) {
     private val _userData = MutableLiveData<User?>()
     val userData: LiveData<User?> get() = _userData
 
-    private val repository = Repository.repo
+    private val sharedPreferencesManager = SharedPreferencesManager(application)
 
-    // Cargar los datos del usuario desde el repositorio
-    //No se utiliza ya
-    fun loadUserData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val user = repository.getLoggedUser()
-            withContext(Dispatchers.Main) {
-                _userData.value = user
+    init {
+        loadUserData()
+    }
+
+    private fun loadUserData() {
+        val email = sharedPreferencesManager.getEmail()
+        val name = sharedPreferencesManager.getName()
+
+        Log.d("PerfilViewModel", "Cargando datos del usuario")
+        Log.d("PerfilViewModel", "Email: $email, Nombre: $name")
+
+        if (email != null && name != null) {
+            val user = User().apply {
+                this.email = email
+                this.nombre = name
             }
+            _userData.value = user
+            Log.d("PerfilViewModel", "Datos del usuario cargados en LiveData")
+        } else {
+            _userData.value = null
+            Log.d("PerfilViewModel", "Datos del usuario no encontrados")
         }
     }
 }
