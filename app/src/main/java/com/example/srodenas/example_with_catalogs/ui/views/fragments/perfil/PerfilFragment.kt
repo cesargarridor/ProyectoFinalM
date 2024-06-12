@@ -49,8 +49,8 @@ class PerfilFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                // Manejar la opción de cerrar sesión
-                // Aquí debes limpiar los datos del usuario y redirigir al login
+
+
                 true
             }
             else -> super.onOptionsItemSelected(item)

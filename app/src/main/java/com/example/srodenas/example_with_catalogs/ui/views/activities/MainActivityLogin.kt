@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.srodenas.example_with_catalogs.domain.users.models.Login
 import com.example.srodenas.example_with_catalogs.domain.users.models.Registro
 import com.example.srodenas.example_with_catalogs.domain.users.models.User
@@ -80,15 +81,14 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
         val userAPI = retrofit.create(UserInterface::class.java)
-        val call = userAPI.login(login)
         return try {
-            val response = call?.execute()
-            if (response?.isSuccessful == true) {
+            val response = userAPI.login(login)
+            if (response.isSuccessful) {
                 val user = response.body()
                 Log.d("MainActivityLogin", "Login exitoso: Usuario - $user")
                 user
             } else {
-                Log.e("MainActivityLogin", "Error en login: ${response?.errorBody()?.string()}")
+                Log.e("MainActivityLogin", "Error en login: ${response.errorBody()?.string()}")
                 null
             }
         } catch (e: Exception) {
@@ -119,7 +119,7 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
     }
 
     override fun insertarUsuario(registro: Registro?) {
-        GlobalScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             val gson = GsonBuilder()
                 .setLenient()
                 .create()
@@ -128,18 +128,15 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
             val userAPI = retrofit.create(UserInterface::class.java)
-            val call = userAPI.registro(registro)
             try {
-                val response = call?.execute()
-                if (response != null) {
-                    if (response.isSuccessful) {
-                        val user = response.body()
-                        runOnUiThread {
-                            entrarConRegis(user)
-                        }
-                    } else {
-                        Log.e("error", "Error insertando usuario")
+                val response = userAPI.registro(registro)
+                if (response.isSuccessful) {
+                    val user = response.body()
+                    runOnUiThread {
+                        entrarConRegis(user)
                     }
+                } else {
+                    Log.e("error", "Error insertando usuario")
                 }
             } catch (e: Exception) {
                 Log.e("error", e.message ?: "Error desconocido")

@@ -31,11 +31,10 @@ class UserViewModel : ViewModel() {
     fun showUsers(token: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val call = userAPI.getUsers(token)
-                val response = call?.execute()
-                if (response?.isSuccessful == true) {
+                val response = userAPI.getUsers(token)
+                if (response.isSuccessful) {
                     val userResponse = response.body()
-                    Log.d("UserViewModel", "Respuesta completa: ${response.body()}")
+                    Log.d("UserViewModel", "Respuesta completa: $userResponse")
                     userResponse?.let {
                         Log.d("UserViewModel", "Estado de la respuesta: ${it.result}")
                         Log.d("UserViewModel", "Usuarios en el mensaje: ${it.usuarios}")
@@ -45,7 +44,7 @@ class UserViewModel : ViewModel() {
                     Log.d("UserViewModel", "Usuarios obtenidos: $users")
                 } else {
                     _usersLiveData.postValue(Result.failure(Exception("Error fetching users")))
-                    Log.e("UserViewModel", "Error en la respuesta: ${response?.errorBody()?.string()}")
+                    Log.e("UserViewModel", "Error en la respuesta: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
                 _usersLiveData.postValue(Result.failure(e))

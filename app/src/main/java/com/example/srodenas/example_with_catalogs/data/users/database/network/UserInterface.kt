@@ -4,7 +4,7 @@ import com.example.srodenas.example_with_catalogs.data.users.database.network.re
 import com.example.srodenas.example_with_catalogs.domain.users.models.Login
 import com.example.srodenas.example_with_catalogs.domain.users.models.Registro
 import com.example.srodenas.example_with_catalogs.domain.users.models.User
-import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -14,12 +14,12 @@ import retrofit2.http.POST
 interface UserInterface {
     @Headers("Content-Type: application/json")
     @POST("auth")
-    fun login(@Body login: Login?): Call<User?>?
+    suspend fun login(@Body login: Login?): Response<User?>
 
     @Headers("Content-Type: application/json")
     @POST("registro")
-    fun registro(@Body registro: Registro?): Call<User?>?
+    suspend fun registro(@Body registro: Registro?): Response<User?>
 
     @GET("user")
-    fun getUsers(@Header("api-key") token: String?): Call<UserResponse?>?
+    suspend fun getUsers(@Header("api-key") token: String?): Response<UserResponse?>
 }
