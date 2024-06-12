@@ -1,11 +1,13 @@
-package com.example.srodenas.example_with_catalogs.data.users.database
+package com.example.srodenas.example_with_catalogs.data.users.database.network
 
+import com.example.srodenas.example_with_catalogs.data.users.database.network.responses.UserResponse
 import com.example.srodenas.example_with_catalogs.domain.users.models.Login
 import com.example.srodenas.example_with_catalogs.domain.users.models.Registro
 import com.example.srodenas.example_with_catalogs.domain.users.models.User
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -17,6 +19,7 @@ interface UserInterface {
     @Headers("Content-Type: application/json")
     @POST("registro")
     fun registro(@Body registro: Registro?): Call<User?>?
+
     @GET("user")
-    fun getUsers(): Call<List<User>>
+    fun getUsers(@Header("api-key") token: String?): Call<UserResponse?>?
 }

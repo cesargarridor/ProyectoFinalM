@@ -14,7 +14,7 @@ import com.example.srodenas.example_with_catalogs.domain.users.models.Login
 import com.example.srodenas.example_with_catalogs.domain.users.models.Registro
 import com.example.srodenas.example_with_catalogs.domain.users.models.User
 import com.example.srodenas.example_with_catalogs.R
-import com.example.srodenas.example_with_catalogs.data.users.database.UserInterface
+import com.example.srodenas.example_with_catalogs.data.users.database.network.UserInterface
 import com.example.srodenas.example_with_catalogs.domain.users.OnUserInteractionDialogListener
 import com.example.srodenas.example_with_catalogs.ui.views.fragments.perfil.SharedPreferencesManager
 import com.google.gson.GsonBuilder
@@ -33,22 +33,18 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_login)
 
-        // Verificar si el usuario ya ha iniciado sesión
         val sharedPreferencesManager = SharedPreferencesManager(applicationContext)
         if (sharedPreferencesManager.isUserLoggedIn()) {
-            // Si el usuario ya ha iniciado sesión, redirigir a MainActivity
             startActivity(Intent(this@MainActivityLogin, MainActivity::class.java))
-            finish() // Cerrar la actividad de inicio de sesión
+            finish()
             return
         }
 
-        // Verificar permisos
         if (verificarPermiso()) {
-            // Si se tienen los permisos necesarios
         } else {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), MY_PERMISSIONS)
         }
-        inicializarCampos() // Inicializar los campos de entrada
+        inicializarCampos()
     }
 
     private fun inicializarCampos() {
@@ -75,10 +71,13 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
     }
 
     private suspend fun login(login: Login): User? {
-        // Configurar Retrofit para hacer la llamada de inicio de sesión
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://10.0.2.2/api-pueblos/endp/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
         val userAPI = retrofit.create(UserInterface::class.java)
         val call = userAPI.login(login)
@@ -96,7 +95,6 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
     }
 
     private fun entrarConRegis(user: User?) {
-        // Guardar los datos del usuario en SharedPreferences y redirigir a MainActivity
         val sharedPreferencesManager = SharedPreferencesManager(applicationContext)
         sharedPreferencesManager.saveUserData(user?.token ?: "", user?.email ?: "", user?.nombre ?: "")
 
@@ -104,12 +102,10 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
     }
 
     fun iniciarRegistro(view: View?) {
-        // Mostrar diálogo de registro
         RegisterDialog().show(supportFragmentManager, "Registro Usuario")
     }
 
     private fun showError() {
-        // Mostrar un mensaje de error en caso de credenciales incorrectas
         Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
     }
 
@@ -143,7 +139,6 @@ class MainActivityLogin : AppCompatActivity(), OnUserInteractionDialogListener {
     }
 
     private fun verificarPermiso(): Boolean {
-        // Verificar si se tiene el permiso de la cámara
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true
         }

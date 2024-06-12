@@ -11,8 +11,8 @@ import com.example.srodenas.example_with_catalogs.R
 import com.example.srodenas.example_with_catalogs.databinding.FragmentUsuariosBinding
 import com.example.srodenas.example_with_catalogs.ui.viewmodel.users.UserViewModel
 import com.example.srodenas.example_with_catalogs.ui.views.fragments.users.adapter.AdapterUser
+import com.example.srodenas.example_with_catalogs.ui.views.fragments.perfil.SharedPreferencesManager
 
-// Fragmento que maneja la vista de la lista de usuarios
 class UsuariosFragment : Fragment() {
     private var _binding: FragmentUsuariosBinding? = null
     private val binding get() = _binding!!
@@ -20,7 +20,6 @@ class UsuariosFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var adapterUser: AdapterUser
 
-    // Inflar el diseño del fragmento
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,7 +29,6 @@ class UsuariosFragment : Fragment() {
         return binding.root
     }
 
-    // Configuración inicial del fragmento
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -42,6 +40,10 @@ class UsuariosFragment : Fragment() {
 
         }
         binding.myRecyclerViewUsers.adapter = adapterUser
+
+        // Obtener el token desde SharedPreferences
+        val sharedPreferencesManager = SharedPreferencesManager(requireContext())
+        val token = sharedPreferencesManager.getToken()
 
         // Observar los cambios en la lista de usuarios y actualizar el Adapter
         userViewModel.usersLiveData.observe(viewLifecycleOwner, Observer { result ->
@@ -57,17 +59,17 @@ class UsuariosFragment : Fragment() {
             )
         })
 
-        // Solicitar la lista de usuarios al ViewModel
-        userViewModel.showUsers()
+        // Solicitar la lista de usuarios al ViewModel pasando el token
+        if (token != null) {
+            userViewModel.showUsers(token)
+        }
     }
 
-    // Inflar el menú de opciones en este fragmento
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    // Manejar las opciones del menú
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
@@ -78,7 +80,6 @@ class UsuariosFragment : Fragment() {
         }
     }
 
-    // Limpiar la referencia al binding cuando se destruye la vista
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
